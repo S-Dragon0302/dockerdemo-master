@@ -33,6 +33,6 @@ COPY . $WORK_PATH/$APP_NAME
 WORKDIR $WORK_PATH
 
 # ENTRYPOINT 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
+#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
 # CMD
-CMD ["-jar", $APP_NAME-$APP_VERSION.jar]
+#CMD ["-jar", $APP_NAME-$APP_VERSION.jar]
