@@ -4,9 +4,10 @@ FROM java:8
 MAINTAINER Ryuu KK "ryuu_kk@163.com"
 
 # 环境变量
-ENV WORK_PATH /usr/project
+ENV WORK_PATH /home/project/dockerdemo
 ENV APP_NAME dockerdemo
 ENV APP_VERSION 0.0.1
+ENV PACKAGE package.tgz
 
 #RUN rm -vf /var/lib/apt/lists/*
 #RUN apt-get update 
@@ -18,11 +19,13 @@ EXPOSE 8080
 #USER user:group
 
 #VOLUME
-#VOLUME ["/usr/project", "/home/data"]
+VOLUME ["/home/project", "/tmp/data"]
 
 #ADD
+ADD $PACKAGE $WORK_PATH/
+
 #COPY
-COPY . $WORK_PATH/$APP_NAME
+COPY . $WORK_PATH/
 
 #LABEL
 #STOPSIGNAL
@@ -35,4 +38,7 @@ WORKDIR $WORK_PATH
 # ENTRYPOINT 
 #ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
 # CMD
-#CMD ["-jar", $APP_NAME-$APP_VERSION.jar]
+
+CMD ["$APP_NAME.jar"]
+
+
