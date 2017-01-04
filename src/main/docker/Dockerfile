@@ -39,6 +39,5 @@ WORKDIR $WORK_PATH
 #ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
 # CMD
 
-CMD ["$APP_NAME.jar"]
-
+#CMD ["$APP_NAME.jar"]
 
