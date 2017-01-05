@@ -100,7 +100,7 @@
 						<!-- <directory>${project.build.directory}</directory> -->
 					    <dockerDirectory>${project.basedir}/src/main/docker/</dockerDirectory>
 				     	<imageName>
-	        				${docker.registry}/viiso/${project.artifactId}:${git.commit.id.abbrev}
+	        				${docker.registry}/viiso/${project.artifactId}
 	    				</imageName>
 	    				<imageTags>
 	    					<imageTag>${git.commit.id.abbrev}</imageTag>
