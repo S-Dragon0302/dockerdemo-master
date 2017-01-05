@@ -93,17 +93,15 @@
 					    </execution>
 					</executions>
 					<configuration>
-					 	<serverId>ali-docker</serverId>
-      					<registryUrl>registry.cn-hangzhou.aliyuncs.com/viiso/${project.artifactId}</registryUrl>
 						<!-- <forceTags>true</forceTags> -->
-						<pushImage>true</pushImage>
+						<pushImage>false</pushImage>
 						<!-- <directory>${project.build.directory}</directory> -->
 					    <dockerDirectory>${project.basedir}/src/main/docker/</dockerDirectory>
 				     	<imageName>
 	        				${docker.registry}/viiso/${project.artifactId}
 	    				</imageName>
 	    				<imageTags>
-	    					<imageTag>${git.commit.id.abbrev}</imageTag>
+	    					<!-- <imageTag>${git.commit.id.abbrev}</imageTag> -->
 	    					<imageTag>latest</imageTag>
 	    				</imageTags>
 	    				<resources>
