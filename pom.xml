@@ -76,7 +76,7 @@
 						</execution>
 					</executions>
 					<configuration>
-						<generateGitPropertiesFile>true</generateGitPropertiesFile>
+						<generateGitPropertiesFile>false</generateGitPropertiesFile>
 						<injectAllReactorProjects>true</injectAllReactorProjects>
 					</configuration>
             	</plugin>
