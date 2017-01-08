@@ -5,9 +5,9 @@ MAINTAINER Ryuu KK "ryuu_kk@163.com"
 
 # 环境变量
 ENV WORK_PATH /home/project/dockerdemo
-ENV APP_NAME dockerdemo
-ENV APP_VERSION 0.0.1
-ENV PACKAGE package.tgz
+ENV APP_NAME @project.build.finalName@.@project.packaging@
+ENV APP_VERSION @project.version@
+
 
 #RUN rm -vf /var/lib/apt/lists/*
 #RUN apt-get update 
@@ -22,7 +22,7 @@ EXPOSE 8080
 VOLUME ["/home/project", "/tmp/data"]
 
 #ADD
-ADD $PACKAGE $WORK_PATH/
+ADD $APP_NAME $WORK_PATH/
 
 #COPY
 COPY . $WORK_PATH/
@@ -36,8 +36,8 @@ COPY . $WORK_PATH/
 WORKDIR $WORK_PATH
 
 # ENTRYPOINT 
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
-# CMD
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom"]
 
-#CMD ["$APP_NAME.jar"]
+# CMD
+CMD ["-jar", "@project.build.finalName@.@project.packaging@"]
 

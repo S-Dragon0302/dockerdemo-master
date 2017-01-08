@@ -18,11 +18,23 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
+	<distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://42.96.194.173:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://42.96.194.173:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<docker.repostory>registry.cn-hangzhou.aliyuncs.com/viiso</docker.repostory>
+		<docker.repostory>registry.cn-hangzhou.aliyuncs.com</docker.repostory>
 		<docker.registry.name>viiso</docker.registry.name>
 	</properties>
 
@@ -51,19 +63,25 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource><!-- allow Dockerfile useing ${}-->
-				<directory>${project.basedir}/src/main/docker</directory>
+		<resources><!-- 输出Dockerfile至docker文件夹 -->
+			<resource>
+				<directory>src/main/docker</directory>
 				<filtering>true</filtering>
 				<includes>
 	    			<include>**/Dockerfile</include>
 				</includes>
+				<targetPath>../docker</targetPath>
 			</resource>
 		</resources>
 		<plugins>
+			<plugin><!-- 置顶 -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
 				<executions>
 				    <execution>
 				        <phase>package</phase>
@@ -78,8 +96,8 @@
 							<goal>tag</goal>
 						</goals>
 						<configuration>
-							<image>${project.artifactId}:${project.version}</image>
-							<newName>${docker.repostory}/${${project.artifactId}}:${project.version}</newName>
+							<image>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</image>
+							<newName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</newName>
 						</configuration>
 				    </execution>
 				    <execution>
@@ -89,35 +107,43 @@
 							<goal>push</goal>
 						</goals>
 						<configuration>
-							<imageName>${docker.repostory}/${${project.artifactId}:${project.version}</imageName>
+							<imageName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName>
 						</configuration>
-				    </execution>      
+				    </execution>    
 				</executions>
 				<configuration>
+					<serverId>docker-aliyun</serverId>
+					<registryUrl>registry.cn-hangzhou.aliyuncs.com</registryUrl>
 					<!-- <forceTags>true</forceTags> -->
-					<pushImage>true</pushImage>
-				    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+					<pushImage>false</pushImage>
+				    <dockerDirectory>target/docker</dockerDirectory>
 			     	<imageName>
-        				${docker.repostory}/${project.artifactId}:${project.version}
+        				${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}
     				</imageName>
     				<imageTags>
     					<imageTag>${git.commit.id.abbrev}</imageTag>
     					<imageTag>latest</imageTag>
     				</imageTags>
     				<resources>
-						<rescource>
+						<rescource><!-- 将打包文件放入dockerDirectory指定的位置 -->
                    			<targetPath>/</targetPath>
                    			<directory>${project.build.directory}</directory>
                    			<include>${project.build.finalName}.jar</include>
                			</rescource>
+               			<!-- 输出Dockerfile至docker文件夹,如果不使用占位符,可使用以下配置 -->
+               			<!-- 
+               			<resource>
+							<directory>src/main/docker</directory>
+							<filtering>true</filtering>
+							<includes>
+				    			<include>**/Dockerfile</include>
+							</includes>
+							<targetPath>../docker</targetPath>
+						</resource>
+						-->
     				</resources>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>
