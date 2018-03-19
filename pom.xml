@@ -15,18 +15,16 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.3.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<distributionManagement>
 		<repository>
-			<id>miduchina-public</id>
-			<name>miduchina-public</name>
-			<url>http://maven.miduchina.com/nexus/content/groups/miduchina-public</url>
+			<id>miduchina-releases</id>
+			<url>http://maven.miduchina.com/nexus/content/repositories/miduchina-releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>snapshot</id>
-			<name>Snapshot Repository</name>
+			<id>miduchina-snapshots</id>
 			<url>http://maven.miduchina.com/nexus/content/repositories/miduchina-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
@@ -34,8 +32,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<docker.repostory>registry.cn-hangzhou.aliyuncs.com</docker.repostory>
-		<docker.registry.name>viiso</docker.registry.name>
+		<docker.repostory>harbor.miduchina.com</docker.repostory>
+		<docker.registry.name>private</docker.registry.name>
 	</properties>
 
 	<dependencies>
@@ -43,7 +41,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -54,7 +52,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -68,7 +66,7 @@
 				<directory>src/main/docker</directory>
 				<filtering>true</filtering>
 				<includes>
-	    			<include>**/Dockerfile</include>
+					<include>**/Dockerfile</include>
 				</includes>
 				<targetPath>../docker</targetPath>
 			</resource>
@@ -83,13 +81,13 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.4.13</version>
 				<executions>
-				    <execution>
-				        <phase>package</phase>
-				        <goals>
-				            <goal>build</goal>
-				        </goals>
-				    </execution>
-				    <execution>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>tag-image</id>
 						<phase>package</phase>
 						<goals>
@@ -99,8 +97,8 @@
 							<image>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</image>
 							<newName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</newName>
 						</configuration>
-				    </execution>
-				    <execution>
+					</execution>
+					<execution>
 						<id>push-image</id>
 						<phase>deploy</phase>
 						<goals>
@@ -109,39 +107,32 @@
 						<configuration>
 							<imageName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName>
 						</configuration>
-				    </execution>    
+					</execution>
 				</executions>
 				<configuration>
 					<serverId>docker-aliyun</serverId>
-					<registryUrl>registry.cn-hangzhou.aliyuncs.com</registryUrl>
+					<registryUrl>harbor.miduchina.com</registryUrl>
 					<!-- <forceTags>true</forceTags> -->
 					<pushImage>false</pushImage>
-				    <dockerDirectory>target/docker</dockerDirectory>
-			     	<imageName>
-        				${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}
-    				</imageName>
-    				<imageTags>
-    					<imageTag>${git.commit.id.abbrev}</imageTag>
-    					<imageTag>latest</imageTag>
-    				</imageTags>
-    				<resources>
+					<dockerDirectory>target/docker</dockerDirectory>
+					<imageName>
+						${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}
+					</imageName>
+					<imageTags>
+						<imageTag>${git.commit.id.abbrev}</imageTag>
+						<imageTag>latest</imageTag>
+					</imageTags>
+					<resources>
 						<rescource><!-- 将打包文件放入dockerDirectory指定的位置 -->
-                   			<targetPath>/</targetPath>
-                   			<directory>${project.build.directory}</directory>
-                   			<include>${project.build.finalName}.jar</include>
-               			</rescource>
-               			<!-- 输出Dockerfile至docker文件夹,如果不使用占位符,可使用以下配置 -->
-               			<!-- 
-               			<resource>
-							<directory>src/main/docker</directory>
-							<filtering>true</filtering>
-							<includes>
-				    			<include>**/Dockerfile</include>
-							</includes>
-							<targetPath>../docker</targetPath>
-						</resource>
-						-->
-    				</resources>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</rescource>
+						<!-- 输出Dockerfile至docker文件夹,如果不使用占位符,可使用以下配置 -->
+						<!-- <resource> <directory>src/main/docker</directory> <filtering>true</filtering> 
+							<includes> <include>**/Dockerfile</include> </includes> <targetPath>../docker</targetPath> 
+							</resource> -->
+					</resources>
 				</configuration>
 			</plugin>
 		</plugins>
