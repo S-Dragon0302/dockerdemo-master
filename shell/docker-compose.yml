@@ -1,0 +1,25 @@
+# This will start some web service.
+# Authors: junjie@miduchina.com
+# Date: 2018-03-08
+
+
+test_api_demo_01:
+    image: harbor.miduchina.com/test/demo:latest
+    ports:
+        - "7480:8080"
+    volumes:
+        - /data/logs/test/demo/7380-api-beta.demo.intra.51wyq.cn:/tmp
+
+test_api_demo_02:
+    image: harbor.miduchina.com/test/demo:latest
+    ports:
+        - "7480:8080"
+    volumes:
+        - /data/logs/test/demo/7380-api-beta.demo.intra.51wyq.cn:/tmp
+
+test_api_demo_03:
+    image: harbor.miduchina.com/test/demo:latest
+    ports:
+        - "7580:8080"
+    volumes:
+        - /data/logs/test/demo/7580-api-beta.demo.intra.51wyq.cn:/tmp
