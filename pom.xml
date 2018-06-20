@@ -5,7 +5,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>dockerdemo</artifactId>
-	<version>0.0.9</version>
+	<version>0.0.16</version>
 	<packaging>jar</packaging>
 
 	<name>dockerdemo</name>
@@ -113,7 +113,7 @@
 					<serverId>miduchina-docker</serverId>
 					<registryUrl>harbor.miduchina.com</registryUrl>
 					<!-- <forceTags>true</forceTags> -->
-					<pushImage>false</pushImage>
+					<pushImage>true</pushImage>
 					<dockerDirectory>target/docker</dockerDirectory>
 					<imageName>
 						${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}
